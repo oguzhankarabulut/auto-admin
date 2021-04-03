@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func main()  {
+func main() {
 
 	_ = server()
 }
@@ -22,7 +22,8 @@ func server() error {
 	gah := handler.NewHandler(repository)
 
 	for _, c := range cc {
-		http.HandleFunc("/" + c, gah.GetAll)
+		http.HandleFunc("/"+c, gah.Handle)
 	}
+
 	return http.ListenAndServe("localhost:8000", nil)
 }

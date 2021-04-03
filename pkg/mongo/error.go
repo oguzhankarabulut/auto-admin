@@ -13,6 +13,8 @@ const (
 	errCount             = "mongo: client count"
 	errInsertMany        = "mongo: client insert many"
 	errCollectionNames   = "mongo: client collection names"
+	errCreate            = "mongo: error create"
+	errAll               = "mongo: error all"
 )
 
 func wrapError(localErr string, err error) error {
