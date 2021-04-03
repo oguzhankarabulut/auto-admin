@@ -32,7 +32,8 @@ func (h *handler) All(w http.ResponseWriter, r *http.Request) {
 func (h *handler) Create(w http.ResponseWriter, r *http.Request) {
 	m, err := bodyToMap(r)
 	if err != nil {
-
+		WriteError(w, err, http.StatusBadRequest)
+		return
 	}
 	_, err = h.r.Create(collection(r), m)
 	if err != nil {
