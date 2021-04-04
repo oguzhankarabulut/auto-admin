@@ -10,10 +10,9 @@ import (
 )
 
 const (
-	eq           = "$eq"
 	set          = "$set"
-	keyClientId  = "client_id"
 	keyTimestamp = "timestamp"
+	keyId        = "_id"
 )
 
 type Client struct {
@@ -61,7 +60,7 @@ func (c *Client) InsertOne(coll string, v interface{}) error {
 	return nil
 }
 
-func (c *Client) Update(coll string, f bson.D, v interface{}) error {
+func (c *Client) Update(coll string, f bson.M, v interface{}) error {
 	col := c.mc.Database(c.db).Collection(coll)
 	u := bson.D{{set, v}}
 	var updatedDocument bson.M
@@ -136,4 +135,14 @@ func (c *Client) CollectionNames() ([]string, error) {
 	}
 
 	return cc, nil
+}
+
+func (c *Client) Delete(coll string, q bson.M) error {
+	col := c.mc.Database(c.db).Collection(coll)
+	_, err := col.DeleteOne(context.Background(), q)
+	if err != nil {
+		return wrapError(errDeleteOne, err)
+	}
+
+	return nil
 }
