@@ -2,7 +2,6 @@ package mongo
 
 import (
 	"context"
-	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -65,7 +64,6 @@ func (c *Client) Update(coll string, f bson.M, v interface{}) error {
 	u := bson.D{{set, v}}
 	var updatedDocument bson.M
 	err := col.FindOneAndUpdate(context.Background(), f, u).Decode(&updatedDocument)
-	fmt.Println(err)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return wrapError(errUpdateById, err)

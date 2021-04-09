@@ -20,6 +20,7 @@ type Repository interface {
 	Update(coll string, i map[string]interface{}) (interface{}, error)
 	Delete(coll string, id string) error
 	Single(coll string, id string) (interface{}, error)
+	CollectionNames() ([]string, error)
 }
 
 func (r *repository) All(coll string) ([]bson.M, error) {
@@ -35,8 +36,7 @@ func (r *repository) Single(coll string, id string) (interface{}, error) {
 	q := bson.M{keyId: objId}
 	m := make(map[string]interface{})
 	if err := r.mc.FindOne(coll, q, m); err != nil {
-		fmt.Println(err)
-		return nil, err
+		return nil, wrapError(errSingle+coll, err)
 	}
 	return m, nil
 }
@@ -66,4 +66,13 @@ func (r *repository) Delete(coll string, id string) error {
 	}
 
 	return nil
+}
+
+func (r *repository) CollectionNames() ([]string, error) {
+	cc, err := r.mc.CollectionNames()
+	if err != nil {
+		return nil, wrapError(errCollectionNames, err)
+	}
+
+	return cc, nil
 }

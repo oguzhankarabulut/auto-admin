@@ -32,7 +32,7 @@ func writeResponse(w http.ResponseWriter, v interface{}, status int) {
 
 }
 
-func write(w http.ResponseWriter, v interface{}) {
+func Write(w http.ResponseWriter, v interface{}) {
 	r := Response{
 		Content:      v,
 		Message:      ok,
@@ -61,4 +61,3 @@ func WriteError(w http.ResponseWriter, err error, httpStatus int) {
 	}
 	writeResponse(w, r, httpStatus)
 }
-

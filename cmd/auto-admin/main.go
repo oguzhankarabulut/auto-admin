@@ -1,7 +1,8 @@
 package main
 
 import (
-	"auto-admin/pkg/handler"
+	"auto-admin/pkg/handler/api"
+	"auto-admin/pkg/handler/web"
 	"auto-admin/pkg/mongo"
 	"net/http"
 )
@@ -19,10 +20,13 @@ func server() error {
 	cc, _ := mc.CollectionNames()
 
 	repository = mongo.NewRepository(mc)
-	gah := handler.NewHandler(repository)
+	gah := api.NewHandler(repository)
+
+	dh := web.NewDashBoardHandler(repository)
+	http.HandleFunc("/dashboard", dh.HandleDashboard)
 
 	for _, c := range cc {
-		http.HandleFunc("/"+c, gah.Handle)
+		http.HandleFunc("/api/"+c, gah.HandleApi)
 	}
 
 	return http.ListenAndServe("localhost:8000", nil)

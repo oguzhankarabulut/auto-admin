@@ -16,6 +16,7 @@ const (
 	errDeleteOne         = "mongo: client delete one"
 	errCreate            = "mongo: error create"
 	errAll               = "mongo: error all"
+	errSingle            = "mongo: error single"
 	errUpdate            = "mongo: error update"
 	errDelete            = "mongo: error delete"
 )

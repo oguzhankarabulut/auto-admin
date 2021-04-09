@@ -10,15 +10,15 @@ const (
 	keyId = "id"
 )
 
-func collection(r *http.Request) string {
-	return r.URL.Path[1:]
+func CollectionApi(r *http.Request) string {
+	return r.URL.Path[len("/api/"):]
 }
 
-func id(r *http.Request) string {
+func Id(r *http.Request) string {
 	return r.URL.Query().Get(keyId)
 }
 
-func bodyToMap(r *http.Request) (map[string]interface{}, error) {
+func BodyToMap(r *http.Request) (map[string]interface{}, error) {
 	b, _ := ioutil.ReadAll(r.Body)
 	m := make(map[string]interface{})
 	err := json.Unmarshal(b, &m)
