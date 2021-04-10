@@ -20,13 +20,14 @@ func server() error {
 	cc, _ := mc.CollectionNames()
 
 	repository = mongo.NewRepository(mc)
-	gah := api.NewHandler(repository)
+	ah := api.NewHandler(repository)
 
-	dh := web.NewDashBoardHandler(repository)
-	http.HandleFunc("/dashboard", dh.HandleDashboard)
+	wh := web.NewDashBoardHandler(repository)
+	http.HandleFunc("/dashboard", wh.HandleDashboard)
 
 	for _, c := range cc {
-		http.HandleFunc("/api/"+c, gah.HandleApi)
+		http.HandleFunc("/api/"+c, ah.HandleApi)
+		http.HandleFunc("/"+c, wh.HandleDashboard)
 	}
 
 	return http.ListenAndServe("localhost:8000", nil)

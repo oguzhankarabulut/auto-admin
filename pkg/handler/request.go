@@ -14,6 +14,10 @@ func CollectionApi(r *http.Request) string {
 	return r.URL.Path[len("/api/"):]
 }
 
+func CollectionWeb(r *http.Request) string {
+	return r.URL.Path[1:]
+}
+
 func Id(r *http.Request) string {
 	return r.URL.Query().Get(keyId)
 }
