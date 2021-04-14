@@ -5,6 +5,7 @@ import (
 	"auto-admin/pkg/handler/web"
 	"auto-admin/pkg/mongo"
 	"net/http"
+	"os"
 )
 
 func main() {
@@ -15,8 +16,8 @@ func main() {
 func server() error {
 	var repository mongo.Repository
 
-	mc := mongo.NewClient("mongodb://root:example@localhost:27017")
-	mc.SetDB("auto-admin")
+	mc := mongo.NewClient("mongodb://localhost:27017")
+	mc.SetDB("sanovel-strapi")
 	cc, _ := mc.CollectionNames()
 
 	repository = mongo.NewRepository(mc)
@@ -24,6 +25,8 @@ func server() error {
 
 	wh := web.NewDashBoardHandler(repository)
 	http.HandleFunc("/dashboard", wh.HandleDashboard)
+	wd, _ := os.Getwd()
+	http.Handle("/scripts/", http.StripPrefix("/scripts/", http.FileServer(http.Dir(wd+"/pkg/template/scripts"))))
 
 	for _, c := range cc {
 		http.HandleFunc("/api/"+c, ah.HandleApi)

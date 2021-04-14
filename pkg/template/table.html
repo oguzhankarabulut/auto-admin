@@ -1,6 +1,128 @@
-<h1>{{.CollectionName}}</h1>
-<ul>
-    {{range .Documents}}
-        <li class="done">{{.}}</li>
-    {{end}}
-</ul>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+    *{
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    .page-wrapper{
+        display: grid;
+        grid-template-columns:260px 1fr;
+    }
+    .page-content{
+        padding: 30px;
+    }
+    h2{
+        text-transform: capitalize;
+        font-weight: bold;
+        font-size: 42px;
+        line-height: 44px;
+        letter-spacing: -0.02em;
+        color: #172B4D;
+        margin-bottom: 20px;
+    }
+    .table-wrapper{
+        background: #FFFFFF;
+        box-shadow: 0px 18px 12px rgba(23, 43, 77, 0.04), 0px 24px 18px rgba(23, 43, 77, 0.08);
+        border-radius: 3px;
+        border: 1px solid #F4F5F7;
+        overflow-x: auto;
+        max-width: calc(100vw - 320px);
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th {
+        text-align: left;
+        padding: 12px 16px;
+        font-size: 14px;
+        line-height: 20px;
+        color: #42526E;
+        font-weight: 500;
+        background-color: #F4F5F7;
+
+    }
+    tr > td:first-child{
+        font-weight: 600;
+    }
+    td{
+        padding: 12px 16px;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 20px;
+        color: #42526E;
+        font-weight: 400;
+    }
+    tr:nth-child(even) {
+        background-color: #FAFBFC;
+    }
+    td a{
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 20px;
+        color: #0065FF;
+        text-decoration: none;
+    }
+    .data-not-found{
+        padding: 30px;
+        text-align: center;
+    }
+    .data-not-found > h1{
+        font-weight: 300;
+        font-size: 62px;
+        line-height: 72px;
+        letter-spacing: -0.03em;
+        color: #172B4D;
+    }
+    .data-not-found > h3{
+        font-weight: 300;
+        font-size: 28px;
+        line-height: 32px;
+        letter-spacing: -0.01em;
+        color: #172B4D;
+        margin-top: 20px;
+    }
+    .side-menu-wrapper{
+        background: #FFFFFF;
+        box-shadow: 0px 18px 12px rgba(23, 43, 77, 0.04), 0px 24px 18px rgba(23, 43, 77, 0.08);
+        border-radius: 3px;
+        border: 1px solid #F4F5F7;
+        padding: 30px 0;
+        min-height: 100vh;
+    }
+    .side-menu-wrapper > a{
+        text-decoration: none;
+        padding: 12px 20px;
+    }
+    .side-menu{
+        list-style: none;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    .side-menu > li > a{
+        display: block;
+        padding: 12px 20px;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 20px;
+        color: #172B4D;
+        text-transform: capitalize;
+    }
+    .side-menu > li > a:hover{
+        background-color: #F4F5F7;
+        color: #061938;
+    }
+</style>
+
+<div id="app"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+<script>
+    let data = {{.}};
+</script>
+<script src="/scripts/components.js"></script>
+<script src="/scripts/table.js"></script>
