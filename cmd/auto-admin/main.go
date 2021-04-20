@@ -16,8 +16,8 @@ func main() {
 func server() error {
 	var repository mongo.Repository
 
-	mc := mongo.NewClient("mongodb://localhost:27017")
-	mc.SetDB("sanovel-strapi")
+	mc := mongo.NewClient("mongodb://root:example@localhost:27017")
+	mc.SetDB("quin-panel")
 	cc, _ := mc.CollectionNames()
 
 	repository = mongo.NewRepository(mc)
