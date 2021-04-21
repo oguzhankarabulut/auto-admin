@@ -4,10 +4,14 @@ import (
 	"testing"
 )
 
-func TestAllWithValidDocument(t *testing.T) {
+func BaseRepositoryTest() *repository {
 	mc := NewClient("mongodb://root:example@localhost:27017")
 	mc.SetDB("auto-admin")
-	r := NewRepository(mc)
+	return NewRepository(mc)
+}
+
+func TestAllWithValidDocument(t *testing.T) {
+	r := BaseRepositoryTest()
 	d, _ := r.CollectionNames()
 	_, err := r.All(d[0])
 	if err == nil {
@@ -16,10 +20,16 @@ func TestAllWithValidDocument(t *testing.T) {
 }
 
 func TestAllWithInvalidDocument(t *testing.T) {
-	mc := NewClient("mongodb://root:example@localhost:27017")
-	mc.SetDB("auto-admin")
-	r := NewRepository(mc)
+	r := BaseRepositoryTest()
 	_, err := r.All("test")
+	if err != nil {
+		t.Logf("success")
+	}
+}
+
+func TestAllWithNilDocument(t *testing.T) {
+	r := BaseRepositoryTest()
+	_, err := r.All("")
 	if err != nil {
 		t.Logf("success")
 	}
