@@ -16,7 +16,7 @@ func NewRepository(mc *Client) *repository {
 
 type Repository interface {
 	All(coll string) ([]bson.M, error)
-	Create(coll string, i interface{}) (interface{}, error)
+	Create(coll string, i map[string]interface{}) (interface{}, error)
 	Update(coll string, i map[string]interface{}) (interface{}, error)
 	Delete(coll string, id string) error
 	Single(coll string, id string) (interface{}, error)
@@ -41,7 +41,10 @@ func (r *repository) Single(coll string, id string) (interface{}, error) {
 	return m, nil
 }
 
-func (r *repository) Create(coll string, i interface{}) (interface{}, error) {
+func (r *repository) Create(coll string, i map[string]interface{}) (interface{}, error) {
+	if len(i) == 0 {
+		return nil, wrapError(errCreateObjectNil, nil)
+	}
 	if err := r.mc.InsertOne(coll, i); err != nil {
 		return nil, wrapError(errCreate+coll, err)
 	}
