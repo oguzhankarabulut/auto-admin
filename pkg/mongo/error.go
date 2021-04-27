@@ -20,6 +20,7 @@ const (
 	errUpdate            = "mongo: error update"
 	errDelete            = "mongo: error delete"
 	errCreateObjectNil   = "mongo: create object nil"
+	errCollectionCount   = "mongo: error collection count"
 )
 
 func wrapError(localErr string, err error) error {

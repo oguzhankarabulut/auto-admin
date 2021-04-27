@@ -43,42 +43,64 @@ func (h *dashboardHandler) HandleDashboard(w http.ResponseWriter, r *http.Reques
 
 type dashboardResponse struct {
 	Collections []string
+	Metric      map[string]int64
 	Title       string
 }
 
 type tableResponse struct {
 	CollectionName string
+	Collections    []string
 	Documents      []bson.M
 }
 
 type detailResponse struct {
 	CollectionName string
+	Collections    []string
 	Detail         interface{}
 }
 
 func (h *dashboardHandler) Dashboard(w http.ResponseWriter) {
-	tmpl := template(dashboard)
-	cc, err := h.r.CollectionNames()
-	dr := dashboardResponse{Collections: cc, Title: collections}
+	cn, err := h.r.CollectionNames()
 	if err != nil {
 		handler.WriteError(w, err, http.StatusInternalServerError)
 	}
+
+	m := make(map[string]int64)
+	if len(cn) != 0 {
+		for i := 0; i < len(cn); i++ {
+			c, _ := h.r.Count(cn[i])
+			m[cn[i]] = c
+		}
+	}
+
+	tmpl := template(dashboard)
+	dr := dashboardResponse{Collections: cn, Metric: m, Title: collections}
 	_ = tmpl.Execute(w, dr)
 }
 
 func (h *dashboardHandler) Table(w http.ResponseWriter, r *http.Request) {
+	cn, err := h.r.CollectionNames()
+	if err != nil {
+		handler.WriteError(w, err, http.StatusInternalServerError)
+	}
+
 	coll := handler.CollectionWeb(r)
 	template := template(table)
 	cc, _ := h.r.All(coll)
-	tr := tableResponse{CollectionName: coll, Documents: cc}
+	tr := tableResponse{CollectionName: coll, Collections: cn, Documents: cc}
 	_ = template.Execute(w, tr)
 }
 
 func (h *dashboardHandler) Detail(w http.ResponseWriter, r *http.Request) {
+	cn, err := h.r.CollectionNames()
+	if err != nil {
+		handler.WriteError(w, err, http.StatusInternalServerError)
+	}
+
 	coll := handler.CollectionWeb(r)
 	template := template(detail)
 	i, _ := h.r.Single(coll, handler.Id(r))
-	der := detailResponse{CollectionName: coll, Detail: i}
+	der := detailResponse{CollectionName: coll, Collections: cn, Detail: i}
 	_ = template.Execute(w, der)
 
 }

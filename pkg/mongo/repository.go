@@ -21,6 +21,7 @@ type Repository interface {
 	Delete(coll string, id string) error
 	Single(coll string, id string) (interface{}, error)
 	CollectionNames() ([]string, error)
+	Count(coll string) (int64, error)
 }
 
 func (r *repository) All(coll string) ([]bson.M, error) {
@@ -78,4 +79,13 @@ func (r *repository) CollectionNames() ([]string, error) {
 	}
 
 	return cc, nil
+}
+
+func (r *repository) Count(coll string) (int64, error) {
+	c, err := r.mc.Count(coll)
+	if err != nil {
+		return 0, wrapError(errCollectionCount, err)
+	}
+
+	return c, nil
 }
