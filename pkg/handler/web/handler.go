@@ -8,10 +8,11 @@ import (
 )
 
 const (
-	collections = "collections"
-	dashboard   = "dashboard"
-	table       = "table"
-	detail      = "detail"
+	collections   = "collections"
+	dashboard     = "dashboard"
+	table         = "table"
+	detail        = "detail"
+	dashboardPath = "/dashboard"
 )
 
 type dashboardHandler struct {
@@ -26,7 +27,7 @@ func (h *dashboardHandler) HandleDashboard(w http.ResponseWriter, r *http.Reques
 	switch r.Method {
 	case handler.GET:
 		switch r.URL.Path {
-		case "/dashboard":
+		case dashboardPath:
 			h.Dashboard(w)
 		default:
 			switch handler.Id(r) {

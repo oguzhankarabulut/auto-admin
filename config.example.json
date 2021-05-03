@@ -1,0 +1,5 @@
+{
+  "mongo_db_connection_string": "mongodb://root:example@localhost:27017",
+  "database_name": "auto-admin",
+  "path": "localhost:8000"
+}
