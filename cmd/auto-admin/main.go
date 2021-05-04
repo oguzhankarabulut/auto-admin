@@ -4,6 +4,7 @@ import (
 	"auto-admin/pkg/handler/api"
 	"auto-admin/pkg/handler/web"
 	"auto-admin/pkg/mongo"
+	"auto-admin/pkg/service"
 	"log"
 	"net/http"
 	"os"
@@ -38,12 +39,18 @@ func server() error {
 	cc, _ := mc.CollectionNames()
 
 	repository = mongo.NewRepository(mc)
-	ah := api.NewHandler(repository)
+	ws := service.NewWebService(repository, cc)
+	as := service.NewApiService(repository)
+	ah := api.NewApiHandler(as)
 
-	wh := web.NewDashBoardHandler(repository)
+	wh := web.NewDashBoardHandler(ws)
+
 	http.HandleFunc(dashboardPath, wh.HandleDashboard)
-	wd, _ := os.Getwd()
-	http.Handle(scripts, http.StripPrefix("/scripts/", http.FileServer(http.Dir(wd+scriptsPath))))
+	wd, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+	http.Handle(scripts, http.StripPrefix(scripts, http.FileServer(http.Dir(wd+scriptsPath))))
 
 	for _, c := range cc {
 		http.HandleFunc(apiPath+c, ah.HandleApi)
